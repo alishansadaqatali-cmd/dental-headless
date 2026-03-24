@@ -5,13 +5,10 @@ export default function Header() {
   const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
-    // Menu data fetch karne ka function
     fetch('https://api.codingdudees.com/wp-json/menus/v1/menus/main-menu')
       .then(res => res.json())
       .then(data => {
         setMenuItems(data.items);
-        // Debugging ke liye console zaroor check karein ke data kya aa raha hai
-        console.log("WordPress Menu Data:", data.items);
       })
       .catch(err => console.error("Menu fetch error:", err));
   }, []);
@@ -28,9 +25,11 @@ export default function Header() {
             // 1. Domain remove karein
             let slug = item.url.replace('https://api.codingdudees.com', '');
             
-            // 2. Agar slug khali hai, ya sirf aik slash "/" hai, 
-            // toh usay default "/" (Home) bana do.
-            const finalPath = (slug === "" || slug === "/") ? "/" : slug;
+            // 2. Strong Filter: Agar slug khali hai, sirf "/" hai, ya EXACTLY "/home/" hai, 
+            // toh usay hamesha root "/" bana do.
+            const finalPath = (slug === "" || slug === "/" || slug === "/home" || slug === "/home/") 
+              ? "/" 
+              : slug;
 
             return (
               <li key={item.ID}>
