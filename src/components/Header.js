@@ -10,6 +10,8 @@ export default function Header() {
       .then(res => res.json())
       .then(data => {
         setMenuItems(data.items);
+        // Debugging ke liye console zaroor check karein ke data kya aa raha hai
+        console.log("WordPress Menu Data:", data.items);
       })
       .catch(err => console.error("Menu fetch error:", err));
   }, []);
@@ -23,13 +25,17 @@ export default function Header() {
       <nav>
         <ul className="flex gap-8">
           {menuItems && menuItems.map((item) => {
-            // Hum URL se domain nikal dete hain taaki sirf slug (/about) bache
-            const slug = item.url.replace('https://api.codingdudees.com', '');
+            // 1. Domain remove karein
+            let slug = item.url.replace('https://api.codingdudees.com', '');
             
+            // 2. Agar slug khali hai, ya sirf aik slash "/" hai, 
+            // toh usay default "/" (Home) bana do.
+            const finalPath = (slug === "" || slug === "/") ? "/" : slug;
+
             return (
               <li key={item.ID}>
                 <Link 
-                  to={slug === "" ? "/" : slug} 
+                  to={finalPath} 
                   className="text-gray-600 hover:text-black font-medium transition"
                 >
                   {item.title}
