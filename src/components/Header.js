@@ -16,20 +16,22 @@ export default function Header() {
   return (
     <header className="bg-white border-b sticky top-0 z-50 py-4 px-6 flex justify-between items-center">
       <div className="logo font-bold text-2xl tracking-tighter">
+        {/* Logo hamesha root par jayega */}
         <Link to="/">CODING DUDEES</Link>
       </div>
 
       <nav>
         <ul className="flex gap-8">
           {menuItems && menuItems.map((item) => {
-            // 1. Domain remove karein
+            // 1. Pehle domain ko remove karein
             let slug = item.url.replace('https://api.codingdudees.com', '');
             
-            // 2. Strong Filter: Agar slug khali hai, sirf "/" hai, ya EXACTLY "/home/" hai, 
-            // toh usay hamesha root "/" bana do.
-            const finalPath = (slug === "" || slug === "/" || slug === "/home" || slug === "/home/") 
-              ? "/" 
-              : slug;
+            // 2. Slug ko clean karein: Agar slug khali hai, ya exactly "/home/", ya "/home" hai
+            // Toh usay zabardasti "/" (root) bana dein.
+            let finalPath = slug;
+            if (slug === "" || slug === "/" || slug === "/home" || slug === "/home/") {
+              finalPath = "/";
+            }
 
             return (
               <li key={item.ID}>
